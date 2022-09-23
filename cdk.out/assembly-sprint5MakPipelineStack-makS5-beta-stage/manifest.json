@@ -1,0 +1,407 @@
+{
+  "version": "16.0.0",
+  "artifacts": {
+    "sprint5MakPipelineStackmakS5betastagemakStack37791D01.assets": {
+      "type": "cdk:asset-manifest",
+      "properties": {
+        "file": "sprint5MakPipelineStackmakS5betastagemakStack37791D01.assets.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+      }
+    },
+    "sprint5MakPipelineStackmakS5betastagemakStack37791D01": {
+      "type": "aws:cloudformation:stack",
+      "environment": "aws://unknown-account/unknown-region",
+      "properties": {
+        "templateFile": "sprint5MakPipelineStackmakS5betastagemakStack37791D01.template.json",
+        "validateOnSynth": true,
+        "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-deploy-role-${AWS::AccountId}-${AWS::Region}",
+        "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-cfn-exec-role-${AWS::AccountId}-${AWS::Region}",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/424d6cf0d15abcd944b957c83c277aa994cb14b808b2cc634119de7b91a90a7f.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
+        "additionalDependencies": [
+          "sprint5MakPipelineStackmakS5betastagemakStack37791D01.assets"
+        ],
+        "lookupRole": {
+          "arn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-lookup-role-${AWS::AccountId}-${AWS::Region}",
+          "requiresBootstrapStackVersion": 8,
+          "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+        },
+        "stackName": "makS5-beta-stage-makStack"
+      },
+      "dependencies": [
+        "sprint5MakPipelineStackmakS5betastagemakStack37791D01.assets"
+      ],
+      "metadata": {
+        "/sprint5MakPipelineStack/makS5-beta-stage/makStack/Role/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "Role1ABCC5F0"
+          }
+        ],
+        "/sprint5MakPipelineStack/makS5-beta-stage/makStack/Role/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "RoleDefaultPolicy5FFB7DAB"
+          }
+        ],
+        "/sprint5MakPipelineStack/makS5-beta-stage/makStack/mubariz_table/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "mubariztableEE8380B3"
+          }
+        ],
+        "/sprint5MakPipelineStack/makS5-beta-stage/makStack/dynamo_lambda/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "dynamolambdaA056CCB2"
+          }
+        ],
+        "/sprint5MakPipelineStack/makS5-beta-stage/makStack/dynamo_lambda/AllowInvoke:sprint5MakPipelineStackmakS5betastagemakStackmakTopicEFE8E149": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "dynamolambdaAllowInvokesprint5MakPipelineStackmakS5betastagemakStackmakTopicEFE8E149CB2ADDA9"
+          }
+        ],
+        "/sprint5MakPipelineStack/makS5-beta-stage/makStack/dynamo_lambda/makTopic/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "dynamolambdamakTopic4DEBF98C"
+          }
+        ],
+        "/sprint5MakPipelineStack/makS5-beta-stage/makStack/webHealthLambda/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "webHealthLambdaCE6E4A17"
+          }
+        ],
+        "/sprint5MakPipelineStack/makS5-beta-stage/makStack/webHealthInvocation/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "webHealthInvocation82C004ED"
+          }
+        ],
+        "/sprint5MakPipelineStack/makS5-beta-stage/makStack/webHealthInvocation/AllowEventRulesprint5MakPipelineStackmakS5betastagemakStackwebHealthLambda682A667B": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "webHealthInvocationAllowEventRulesprint5MakPipelineStackmakS5betastagemakStackwebHealthLambda682A667BA8077154"
+          }
+        ],
+        "/sprint5MakPipelineStack/makS5-beta-stage/makStack/mubariz-skipq-bucket-id/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "mubarizskipqbucketidE640680B"
+          }
+        ],
+        "/sprint5MakPipelineStack/makS5-beta-stage/makStack/mubariz-skipq-bucket-id/Policy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "mubarizskipqbucketidPolicyE7807056"
+          }
+        ],
+        "/sprint5MakPipelineStack/makS5-beta-stage/makStack/mubariz-skipq-bucket-id/AutoDeleteObjectsCustomResource/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "mubarizskipqbucketidAutoDeleteObjectsCustomResourceB9D300DA"
+          }
+        ],
+        "/sprint5MakPipelineStack/makS5-beta-stage/makStack/Custom::S3AutoDeleteObjectsCustomResourceProvider/Role": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092"
+          }
+        ],
+        "/sprint5MakPipelineStack/makS5-beta-stage/makStack/Custom::S3AutoDeleteObjectsCustomResourceProvider/Handler": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CustomS3AutoDeleteObjectsCustomResourceProviderHandler9D90184F"
+          }
+        ],
+        "/sprint5MakPipelineStack/makS5-beta-stage/makStack/voyager_skipq/AwsCliLayer/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "voyagerskipqAwsCliLayerC023166D"
+          }
+        ],
+        "/sprint5MakPipelineStack/makS5-beta-stage/makStack/voyager_skipq/CustomResource/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "voyagerskipqCustomResource7A3DA170"
+          }
+        ],
+        "/sprint5MakPipelineStack/makS5-beta-stage/makStack/Custom::CDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRole89A01265"
+          }
+        ],
+        "/sprint5MakPipelineStack/makS5-beta-stage/makStack/Custom::CDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRoleDefaultPolicy88902FDF"
+          }
+        ],
+        "/sprint5MakPipelineStack/makS5-beta-stage/makStack/Custom::CDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C81C01536"
+          }
+        ],
+        "/sprint5MakPipelineStack/makS5-beta-stage/makStack/makTopic/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "makTopic4E43F9BC"
+          }
+        ],
+        "/sprint5MakPipelineStack/makS5-beta-stage/makStack/makTopic/mubariz.khan.skipq@gmail.com/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "makTopicmubarizkhanskipqgmailcom3D8A81CB"
+          }
+        ],
+        "/sprint5MakPipelineStack/makS5-beta-stage/makStack/mak_bucket_to_table/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "makbuckettotableABA65610"
+          }
+        ],
+        "/sprint5MakPipelineStack/makS5-beta-stage/makStack/makBucketToDB/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "makBucketToDBBF370C2B"
+          }
+        ],
+        "/sprint5MakPipelineStack/makS5-beta-stage/makStack/ApiHandler/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ApiHandler5E7490E8"
+          }
+        ],
+        "/sprint5MakPipelineStack/makS5-beta-stage/makStack/APiRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "APiRoleF7DD9F4C"
+          }
+        ],
+        "/sprint5MakPipelineStack/makS5-beta-stage/makStack/mak-CrudApi/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "makCrudApi96E0CE7C"
+          }
+        ],
+        "/sprint5MakPipelineStack/makS5-beta-stage/makStack/mak-CrudApi/CloudWatchRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "makCrudApiCloudWatchRole12498D0D"
+          }
+        ],
+        "/sprint5MakPipelineStack/makS5-beta-stage/makStack/mak-CrudApi/Account": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "makCrudApiAccount6F979584"
+          }
+        ],
+        "/sprint5MakPipelineStack/makS5-beta-stage/makStack/mak-CrudApi/Deployment/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "makCrudApiDeployment7C903670c70c548163ad5630e98ff2617f4ac022"
+          }
+        ],
+        "/sprint5MakPipelineStack/makS5-beta-stage/makStack/mak-CrudApi/DeploymentStage.prod/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "makCrudApiDeploymentStageprod2C835F4F"
+          }
+        ],
+        "/sprint5MakPipelineStack/makS5-beta-stage/makStack/mak-CrudApi/Endpoint": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "makCrudApiEndpoint50A8EC44"
+          }
+        ],
+        "/sprint5MakPipelineStack/makS5-beta-stage/makStack/mak-CrudApi/Default/{proxy+}/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "makCrudApiproxy76BD1647"
+          }
+        ],
+        "/sprint5MakPipelineStack/makS5-beta-stage/makStack/mak-CrudApi/Default/{proxy+}/ANY/ApiPermission.sprint5MakPipelineStackmakS5betastagemakStackmakCrudApi30ECF4D9.ANY..{proxy+}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "makCrudApiproxyANYApiPermissionsprint5MakPipelineStackmakS5betastagemakStackmakCrudApi30ECF4D9ANYproxyACFF5B9B"
+          }
+        ],
+        "/sprint5MakPipelineStack/makS5-beta-stage/makStack/mak-CrudApi/Default/{proxy+}/ANY/ApiPermission.Test.sprint5MakPipelineStackmakS5betastagemakStackmakCrudApi30ECF4D9.ANY..{proxy+}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "makCrudApiproxyANYApiPermissionTestsprint5MakPipelineStackmakS5betastagemakStackmakCrudApi30ECF4D9ANYproxyAEE18B33"
+          }
+        ],
+        "/sprint5MakPipelineStack/makS5-beta-stage/makStack/mak-CrudApi/Default/{proxy+}/ANY/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "makCrudApiproxyANY04762B3A"
+          }
+        ],
+        "/sprint5MakPipelineStack/makS5-beta-stage/makStack/mak-CrudApi/Default/ANY/ApiPermission.sprint5MakPipelineStackmakS5betastagemakStackmakCrudApi30ECF4D9.ANY..": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "makCrudApiANYApiPermissionsprint5MakPipelineStackmakS5betastagemakStackmakCrudApi30ECF4D9ANYEEC8C65C"
+          }
+        ],
+        "/sprint5MakPipelineStack/makS5-beta-stage/makStack/mak-CrudApi/Default/ANY/ApiPermission.Test.sprint5MakPipelineStackmakS5betastagemakStackmakCrudApi30ECF4D9.ANY..": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "makCrudApiANYApiPermissionTestsprint5MakPipelineStackmakS5betastagemakStackmakCrudApi30ECF4D9ANY322CD8ED"
+          }
+        ],
+        "/sprint5MakPipelineStack/makS5-beta-stage/makStack/mak-CrudApi/Default/ANY/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "makCrudApiANY8431B1D6"
+          }
+        ],
+        "/sprint5MakPipelineStack/makS5-beta-stage/makStack/mak-CrudApi/Default/health/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "makCrudApihealth194536A2"
+          }
+        ],
+        "/sprint5MakPipelineStack/makS5-beta-stage/makStack/mak-CrudApi/Default/health/GET/ApiPermission.sprint5MakPipelineStackmakS5betastagemakStackmakCrudApi30ECF4D9.GET..health": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "makCrudApihealthGETApiPermissionsprint5MakPipelineStackmakS5betastagemakStackmakCrudApi30ECF4D9GEThealth0FEF4499"
+          }
+        ],
+        "/sprint5MakPipelineStack/makS5-beta-stage/makStack/mak-CrudApi/Default/health/GET/ApiPermission.Test.sprint5MakPipelineStackmakS5betastagemakStackmakCrudApi30ECF4D9.GET..health": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "makCrudApihealthGETApiPermissionTestsprint5MakPipelineStackmakS5betastagemakStackmakCrudApi30ECF4D9GEThealth38F958CF"
+          }
+        ],
+        "/sprint5MakPipelineStack/makS5-beta-stage/makStack/mak-CrudApi/Default/health/GET/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "makCrudApihealthGET407FE90F"
+          }
+        ],
+        "/sprint5MakPipelineStack/makS5-beta-stage/makStack/mak-CrudApi/Default/url/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "makCrudApiurl34C291E4"
+          }
+        ],
+        "/sprint5MakPipelineStack/makS5-beta-stage/makStack/mak-CrudApi/Default/url/GET/ApiPermission.sprint5MakPipelineStackmakS5betastagemakStackmakCrudApi30ECF4D9.GET..url": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "makCrudApiurlGETApiPermissionsprint5MakPipelineStackmakS5betastagemakStackmakCrudApi30ECF4D9GETurl6725DD11"
+          }
+        ],
+        "/sprint5MakPipelineStack/makS5-beta-stage/makStack/mak-CrudApi/Default/url/GET/ApiPermission.Test.sprint5MakPipelineStackmakS5betastagemakStackmakCrudApi30ECF4D9.GET..url": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "makCrudApiurlGETApiPermissionTestsprint5MakPipelineStackmakS5betastagemakStackmakCrudApi30ECF4D9GETurlAF0C046E"
+          }
+        ],
+        "/sprint5MakPipelineStack/makS5-beta-stage/makStack/mak-CrudApi/Default/url/GET/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "makCrudApiurlGET2880D101"
+          }
+        ],
+        "/sprint5MakPipelineStack/makS5-beta-stage/makStack/mak-CrudApi/Default/url/PUT/ApiPermission.sprint5MakPipelineStackmakS5betastagemakStackmakCrudApi30ECF4D9.PUT..url": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "makCrudApiurlPUTApiPermissionsprint5MakPipelineStackmakS5betastagemakStackmakCrudApi30ECF4D9PUTurl746E140C"
+          }
+        ],
+        "/sprint5MakPipelineStack/makS5-beta-stage/makStack/mak-CrudApi/Default/url/PUT/ApiPermission.Test.sprint5MakPipelineStackmakS5betastagemakStackmakCrudApi30ECF4D9.PUT..url": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "makCrudApiurlPUTApiPermissionTestsprint5MakPipelineStackmakS5betastagemakStackmakCrudApi30ECF4D9PUTurl5F29D2F0"
+          }
+        ],
+        "/sprint5MakPipelineStack/makS5-beta-stage/makStack/mak-CrudApi/Default/url/PUT/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "makCrudApiurlPUT892BD899"
+          }
+        ],
+        "/sprint5MakPipelineStack/makS5-beta-stage/makStack/mak-CrudApi/Default/url/PATCH/ApiPermission.sprint5MakPipelineStackmakS5betastagemakStackmakCrudApi30ECF4D9.PATCH..url": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "makCrudApiurlPATCHApiPermissionsprint5MakPipelineStackmakS5betastagemakStackmakCrudApi30ECF4D9PATCHurlD7060EA6"
+          }
+        ],
+        "/sprint5MakPipelineStack/makS5-beta-stage/makStack/mak-CrudApi/Default/url/PATCH/ApiPermission.Test.sprint5MakPipelineStackmakS5betastagemakStackmakCrudApi30ECF4D9.PATCH..url": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "makCrudApiurlPATCHApiPermissionTestsprint5MakPipelineStackmakS5betastagemakStackmakCrudApi30ECF4D9PATCHurl7F2E3CD0"
+          }
+        ],
+        "/sprint5MakPipelineStack/makS5-beta-stage/makStack/mak-CrudApi/Default/url/PATCH/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "makCrudApiurlPATCH5A84DD3E"
+          }
+        ],
+        "/sprint5MakPipelineStack/makS5-beta-stage/makStack/mak-CrudApi/Default/url/DELETE/ApiPermission.sprint5MakPipelineStackmakS5betastagemakStackmakCrudApi30ECF4D9.DELETE..url": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "makCrudApiurlDELETEApiPermissionsprint5MakPipelineStackmakS5betastagemakStackmakCrudApi30ECF4D9DELETEurl25BA7777"
+          }
+        ],
+        "/sprint5MakPipelineStack/makS5-beta-stage/makStack/mak-CrudApi/Default/url/DELETE/ApiPermission.Test.sprint5MakPipelineStackmakS5betastagemakStackmakCrudApi30ECF4D9.DELETE..url": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "makCrudApiurlDELETEApiPermissionTestsprint5MakPipelineStackmakS5betastagemakStackmakCrudApi30ECF4D9DELETEurl79A72B7D"
+          }
+        ],
+        "/sprint5MakPipelineStack/makS5-beta-stage/makStack/mak-CrudApi/Default/url/DELETE/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "makCrudApiurlDELETEF18317C9"
+          }
+        ],
+        "/sprint5MakPipelineStack/makS5-beta-stage/makStack/DBLambdaInvocation/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "DBLambdaInvocation4D751308"
+          }
+        ],
+        "/sprint5MakPipelineStack/makS5-beta-stage/makStack/DBLambdaInvocation/AllowEventRulesprint5MakPipelineStackmakS5betastagemakStackmakBucketToDB6B4C80F0": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "DBLambdaInvocationAllowEventRulesprint5MakPipelineStackmakS5betastagemakStackmakBucketToDB6B4C80F0C4479000"
+          }
+        ],
+        "/sprint5MakPipelineStack/makS5-beta-stage/makStack/CDKMetadata/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadata"
+          }
+        ],
+        "/sprint5MakPipelineStack/makS5-beta-stage/makStack/CDKMetadata/Condition": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadataAvailable"
+          }
+        ],
+        "/sprint5MakPipelineStack/makS5-beta-stage/makStack/BootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BootstrapVersion"
+          }
+        ],
+        "/sprint5MakPipelineStack/makS5-beta-stage/makStack/CheckBootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CheckBootstrapVersion"
+          }
+        ]
+      },
+      "displayName": "sprint5MakPipelineStack/makS5-beta-stage/makStack"
+    }
+  }
+}

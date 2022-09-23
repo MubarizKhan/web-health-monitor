@@ -1,0 +1,362 @@
+{
+  "version": "16.0.0",
+  "artifacts": {
+    "assembly-sprint5MakPipelineStack-makS5-beta-stage": {
+      "type": "cdk:cloud-assembly",
+      "properties": {
+        "directoryName": "assembly-sprint5MakPipelineStack-makS5-beta-stage",
+        "displayName": "sprint5MakPipelineStack/makS5-beta-stage"
+      }
+    },
+    "assembly-sprint5MakPipelineStack-makS5-prod-stage": {
+      "type": "cdk:cloud-assembly",
+      "properties": {
+        "directoryName": "assembly-sprint5MakPipelineStack-makS5-prod-stage",
+        "displayName": "sprint5MakPipelineStack/makS5-prod-stage"
+      }
+    },
+    "Tree": {
+      "type": "cdk:tree",
+      "properties": {
+        "file": "tree.json"
+      }
+    },
+    "sprint5MakPipelineStack.assets": {
+      "type": "cdk:asset-manifest",
+      "properties": {
+        "file": "sprint5MakPipelineStack.assets.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+      }
+    },
+    "sprint5MakPipelineStack": {
+      "type": "aws:cloudformation:stack",
+      "environment": "aws://unknown-account/unknown-region",
+      "properties": {
+        "templateFile": "sprint5MakPipelineStack.template.json",
+        "tags": {
+          "cohort": "Mubariz"
+        },
+        "validateOnSynth": false,
+        "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-deploy-role-${AWS::AccountId}-${AWS::Region}",
+        "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-cfn-exec-role-${AWS::AccountId}-${AWS::Region}",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/01ec40a4ddd59926248b47783ddf06e82f3d6f5fbf5713f326072548266c0444.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
+        "additionalDependencies": [
+          "sprint5MakPipelineStack.assets"
+        ],
+        "lookupRole": {
+          "arn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-lookup-role-${AWS::AccountId}-${AWS::Region}",
+          "requiresBootstrapStackVersion": 8,
+          "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+        }
+      },
+      "dependencies": [
+        "sprint5MakPipelineStack.assets"
+      ],
+      "metadata": {
+        "/sprint5MakPipelineStack": [
+          {
+            "type": "aws:cdk:stack-tags",
+            "data": [
+              {
+                "Key": "cohort",
+                "Value": "Mubariz"
+              }
+            ]
+          }
+        ],
+        "/sprint5MakPipelineStack/Pipeline-Role/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PipelineRoleDD01DC4E"
+          }
+        ],
+        "/sprint5MakPipelineStack/mak_pipeline/Pipeline/ArtifactsBucket/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "makpipelinePipelineArtifactsBucketBA00CADA"
+          }
+        ],
+        "/sprint5MakPipelineStack/mak_pipeline/Pipeline/ArtifactsBucket/Policy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "makpipelinePipelineArtifactsBucketPolicyF83AE79D"
+          }
+        ],
+        "/sprint5MakPipelineStack/mak_pipeline/Pipeline/Role/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "makpipelinePipelineRole67614B99"
+          }
+        ],
+        "/sprint5MakPipelineStack/mak_pipeline/Pipeline/Role/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "makpipelinePipelineRoleDefaultPolicy6A15FA2B"
+          }
+        ],
+        "/sprint5MakPipelineStack/mak_pipeline/Pipeline/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "makpipelinePipeline16F0306E"
+          }
+        ],
+        "/sprint5MakPipelineStack/mak_pipeline/Pipeline/Build/Synth/CdkBuildProject/Role/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "makpipelinePipelineBuildSynthCdkBuildProjectRole225A3E47"
+          }
+        ],
+        "/sprint5MakPipelineStack/mak_pipeline/Pipeline/Build/Synth/CdkBuildProject/Role/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "makpipelinePipelineBuildSynthCdkBuildProjectRoleDefaultPolicyC5F9B40D"
+          }
+        ],
+        "/sprint5MakPipelineStack/mak_pipeline/Pipeline/Build/Synth/CdkBuildProject/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "makpipelinePipelineBuildSynthCdkBuildProjectA42063C8"
+          }
+        ],
+        "/sprint5MakPipelineStack/mak_pipeline/Pipeline/Build/Synth/CodePipelineActionRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "makpipelinePipelineBuildSynthCodePipelineActionRole91067F91"
+          }
+        ],
+        "/sprint5MakPipelineStack/mak_pipeline/Pipeline/Build/Synth/CodePipelineActionRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "makpipelinePipelineBuildSynthCodePipelineActionRoleDefaultPolicy50D3C5A9"
+          }
+        ],
+        "/sprint5MakPipelineStack/mak_pipeline/Pipeline/UpdatePipeline/SelfMutate/CodePipelineActionRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "makpipelinePipelineUpdatePipelineSelfMutateCodePipelineActionRole1FB406BF"
+          }
+        ],
+        "/sprint5MakPipelineStack/mak_pipeline/Pipeline/UpdatePipeline/SelfMutate/CodePipelineActionRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "makpipelinePipelineUpdatePipelineSelfMutateCodePipelineActionRoleDefaultPolicy386C6F78"
+          }
+        ],
+        "/sprint5MakPipelineStack/mak_pipeline/Pipeline/Assets/FileAsset1/CodePipelineActionRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "makpipelinePipelineAssetsFileAsset1CodePipelineActionRole4DFBDC9A"
+          }
+        ],
+        "/sprint5MakPipelineStack/mak_pipeline/Pipeline/Assets/FileAsset1/CodePipelineActionRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "makpipelinePipelineAssetsFileAsset1CodePipelineActionRoleDefaultPolicy0460436E"
+          }
+        ],
+        "/sprint5MakPipelineStack/mak_pipeline/Pipeline/Assets/FileAsset2/CodePipelineActionRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "makpipelinePipelineAssetsFileAsset2CodePipelineActionRoleD0BEEA59"
+          }
+        ],
+        "/sprint5MakPipelineStack/mak_pipeline/Pipeline/Assets/FileAsset2/CodePipelineActionRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "makpipelinePipelineAssetsFileAsset2CodePipelineActionRoleDefaultPolicy676CFECB"
+          }
+        ],
+        "/sprint5MakPipelineStack/mak_pipeline/Pipeline/Assets/FileAsset3/CodePipelineActionRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "makpipelinePipelineAssetsFileAsset3CodePipelineActionRole415384FE"
+          }
+        ],
+        "/sprint5MakPipelineStack/mak_pipeline/Pipeline/Assets/FileAsset3/CodePipelineActionRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "makpipelinePipelineAssetsFileAsset3CodePipelineActionRoleDefaultPolicyBC062710"
+          }
+        ],
+        "/sprint5MakPipelineStack/mak_pipeline/Pipeline/Assets/FileAsset4/CodePipelineActionRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "makpipelinePipelineAssetsFileAsset4CodePipelineActionRole1DAF953F"
+          }
+        ],
+        "/sprint5MakPipelineStack/mak_pipeline/Pipeline/Assets/FileAsset4/CodePipelineActionRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "makpipelinePipelineAssetsFileAsset4CodePipelineActionRoleDefaultPolicyB300326E"
+          }
+        ],
+        "/sprint5MakPipelineStack/mak_pipeline/Pipeline/Assets/FileAsset5/CodePipelineActionRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "makpipelinePipelineAssetsFileAsset5CodePipelineActionRole2CC3EDD7"
+          }
+        ],
+        "/sprint5MakPipelineStack/mak_pipeline/Pipeline/Assets/FileAsset5/CodePipelineActionRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "makpipelinePipelineAssetsFileAsset5CodePipelineActionRoleDefaultPolicy1970653E"
+          }
+        ],
+        "/sprint5MakPipelineStack/mak_pipeline/Pipeline/makS5-beta-stage/Unit_Test/Unit Test/Role/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "makpipelinePipelinemakS5betastageUnitTestUnitTestRoleA812A40E"
+          }
+        ],
+        "/sprint5MakPipelineStack/mak_pipeline/Pipeline/makS5-beta-stage/Unit_Test/Unit Test/Role/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "makpipelinePipelinemakS5betastageUnitTestUnitTestRoleDefaultPolicyF3464FBA"
+          }
+        ],
+        "/sprint5MakPipelineStack/mak_pipeline/Pipeline/makS5-beta-stage/Unit_Test/Unit Test/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "makpipelinePipelinemakS5betastageUnitTestUnitTest172146E5"
+          }
+        ],
+        "/sprint5MakPipelineStack/mak_pipeline/Pipeline/makS5-beta-stage/Unit_Test/CodePipelineActionRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "makpipelinePipelinemakS5betastageUnitTestCodePipelineActionRoleF56C27DA"
+          }
+        ],
+        "/sprint5MakPipelineStack/mak_pipeline/Pipeline/makS5-beta-stage/Unit_Test/CodePipelineActionRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "makpipelinePipelinemakS5betastageUnitTestCodePipelineActionRoleDefaultPolicy62A91B05"
+          }
+        ],
+        "/sprint5MakPipelineStack/mak_pipeline/Pipeline/makS5-beta-stage/mak/mak/Role/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "makpipelinePipelinemakS5betastagemakRoleEFD326AD"
+          }
+        ],
+        "/sprint5MakPipelineStack/mak_pipeline/Pipeline/makS5-beta-stage/mak/mak/Role/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "makpipelinePipelinemakS5betastagemakRoleDefaultPolicyCB58A9FB"
+          }
+        ],
+        "/sprint5MakPipelineStack/mak_pipeline/Pipeline/makS5-beta-stage/mak/mak/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "makpipelinePipelinemakS5betastagemakDC7012E9"
+          }
+        ],
+        "/sprint5MakPipelineStack/mak_pipeline/Pipeline/makS5-beta-stage/mak/CodePipelineActionRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "makpipelinePipelinemakS5betastagemakCodePipelineActionRoleECEEFCDF"
+          }
+        ],
+        "/sprint5MakPipelineStack/mak_pipeline/Pipeline/makS5-beta-stage/mak/CodePipelineActionRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "makpipelinePipelinemakS5betastagemakCodePipelineActionRoleDefaultPolicyC191AAC0"
+          }
+        ],
+        "/sprint5MakPipelineStack/mak_pipeline/Pipeline/makS5-prod-stage/mak_test-step/CodePipelineActionRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "makpipelinePipelinemakS5prodstagemakteststepCodePipelineActionRole6733C1BB"
+          }
+        ],
+        "/sprint5MakPipelineStack/mak_pipeline/UpdatePipeline/SelfMutation/Role/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "makpipelineUpdatePipelineSelfMutationRoleE44D903E"
+          }
+        ],
+        "/sprint5MakPipelineStack/mak_pipeline/UpdatePipeline/SelfMutation/Role/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "makpipelineUpdatePipelineSelfMutationRoleDefaultPolicyAE2CDB1B"
+          }
+        ],
+        "/sprint5MakPipelineStack/mak_pipeline/UpdatePipeline/SelfMutation/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "makpipelineUpdatePipelineSelfMutationA606D7AF"
+          }
+        ],
+        "/sprint5MakPipelineStack/mak_pipeline/Assets/FileRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "makpipelineAssetsFileRole8F432421"
+          }
+        ],
+        "/sprint5MakPipelineStack/mak_pipeline/Assets/FileRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "makpipelineAssetsFileRoleDefaultPolicyA04C5CDE"
+          }
+        ],
+        "/sprint5MakPipelineStack/mak_pipeline/Assets/FileAsset1/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "makpipelineAssetsFileAsset1DB3B72ED"
+          }
+        ],
+        "/sprint5MakPipelineStack/mak_pipeline/Assets/FileAsset2/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "makpipelineAssetsFileAsset21456BADE"
+          }
+        ],
+        "/sprint5MakPipelineStack/mak_pipeline/Assets/FileAsset3/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "makpipelineAssetsFileAsset383EF06E0"
+          }
+        ],
+        "/sprint5MakPipelineStack/mak_pipeline/Assets/FileAsset4/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "makpipelineAssetsFileAsset46030491A"
+          }
+        ],
+        "/sprint5MakPipelineStack/mak_pipeline/Assets/FileAsset5/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "makpipelineAssetsFileAsset5C62EB0B5"
+          }
+        ],
+        "/sprint5MakPipelineStack/CDKMetadata/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadata"
+          }
+        ],
+        "/sprint5MakPipelineStack/CDKMetadata/Condition": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadataAvailable"
+          }
+        ],
+        "/sprint5MakPipelineStack/BootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BootstrapVersion"
+          }
+        ],
+        "/sprint5MakPipelineStack/CheckBootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CheckBootstrapVersion"
+          }
+        ]
+      },
+      "displayName": "sprint5MakPipelineStack"
+    }
+  }
+}

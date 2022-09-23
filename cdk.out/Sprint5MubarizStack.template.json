@@ -1,0 +1,2362 @@
+{
+  "Resources": {
+    "Role1ABCC5F0": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/CloudWatchFullAccess"
+              ]
+            ]
+          },
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/AmazonDynamoDBFullAccess"
+              ]
+            ]
+          },
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+              ]
+            ]
+          },
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/AWSLambdaInvocation-DynamoDB"
+              ]
+            ]
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "cohort",
+            "Value": "Mubariz"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "Sprint5MubarizStack/Role/Resource"
+      }
+    },
+    "RoleDefaultPolicy5FFB7DAB": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "dynamodb:*",
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "mubariztableEE8380B3",
+                    "Arn"
+                  ]
+                },
+                {
+                  "Ref": "AWS::NoValue"
+                }
+              ]
+            },
+            {
+              "Action": "dynamodb:*",
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "makbuckettotableABA65610",
+                    "Arn"
+                  ]
+                },
+                {
+                  "Ref": "AWS::NoValue"
+                }
+              ]
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "RoleDefaultPolicy5FFB7DAB",
+        "Roles": [
+          {
+            "Ref": "Role1ABCC5F0"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "Sprint5MubarizStack/Role/DefaultPolicy/Resource"
+      }
+    },
+    "mubariztableEE8380B3": {
+      "Type": "AWS::DynamoDB::Table",
+      "Properties": {
+        "KeySchema": [
+          {
+            "AttributeName": "Timestamp",
+            "KeyType": "HASH"
+          },
+          {
+            "AttributeName": "Subject",
+            "KeyType": "RANGE"
+          }
+        ],
+        "AttributeDefinitions": [
+          {
+            "AttributeName": "Timestamp",
+            "AttributeType": "S"
+          },
+          {
+            "AttributeName": "Subject",
+            "AttributeType": "S"
+          }
+        ],
+        "ProvisionedThroughput": {
+          "ReadCapacityUnits": 5,
+          "WriteCapacityUnits": 5
+        },
+        "Tags": [
+          {
+            "Key": "cohort",
+            "Value": "Mubariz"
+          }
+        ]
+      },
+      "UpdateReplacePolicy": "Retain",
+      "DeletionPolicy": "Retain",
+      "Metadata": {
+        "aws:cdk:path": "Sprint5MubarizStack/mubariz_table/Resource"
+      }
+    },
+    "dynamolambdaA056CCB2": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+          },
+          "S3Key": "f74e606ecaaad7b7952cc041a75fffd618f91c33371a9b70a17c0c29c7c1953a.zip"
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "Role1ABCC5F0",
+            "Arn"
+          ]
+        },
+        "Environment": {
+          "Variables": {
+            "tableName": {
+              "Ref": "mubariztableEE8380B3"
+            }
+          }
+        },
+        "Handler": "dynamo_lambda.db_lambda_handler",
+        "Runtime": "python3.6",
+        "Tags": [
+          {
+            "Key": "cohort",
+            "Value": "Mubariz"
+          }
+        ],
+        "Timeout": 60
+      },
+      "DependsOn": [
+        "RoleDefaultPolicy5FFB7DAB",
+        "Role1ABCC5F0"
+      ],
+      "UpdateReplacePolicy": "Delete",
+      "DeletionPolicy": "Delete",
+      "Metadata": {
+        "aws:cdk:path": "Sprint5MubarizStack/dynamo_lambda/Resource",
+        "aws:asset:path": "asset.f74e606ecaaad7b7952cc041a75fffd618f91c33371a9b70a17c0c29c7c1953a",
+        "aws:asset:is-bundled": false,
+        "aws:asset:property": "Code"
+      }
+    },
+    "dynamolambdaAllowInvokeSprint5MubarizStackmakTopicFA5F6144BE3ED010": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "dynamolambdaA056CCB2",
+            "Arn"
+          ]
+        },
+        "Principal": "sns.amazonaws.com",
+        "SourceArn": {
+          "Ref": "makTopic4E43F9BC"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Sprint5MubarizStack/dynamo_lambda/AllowInvoke:Sprint5MubarizStackmakTopicFA5F6144"
+      }
+    },
+    "dynamolambdamakTopic4DEBF98C": {
+      "Type": "AWS::SNS::Subscription",
+      "Properties": {
+        "Protocol": "lambda",
+        "TopicArn": {
+          "Ref": "makTopic4E43F9BC"
+        },
+        "Endpoint": {
+          "Fn::GetAtt": [
+            "dynamolambdaA056CCB2",
+            "Arn"
+          ]
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Sprint5MubarizStack/dynamo_lambda/makTopic/Resource"
+      }
+    },
+    "webHealthLambdaCE6E4A17": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+          },
+          "S3Key": "f74e606ecaaad7b7952cc041a75fffd618f91c33371a9b70a17c0c29c7c1953a.zip"
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "Role1ABCC5F0",
+            "Arn"
+          ]
+        },
+        "Environment": {
+          "Variables": {
+            "bucketName": {
+              "Ref": "mubarizskipqbucketidE640680B"
+            },
+            "bktTotable": {
+              "Ref": "makbuckettotableABA65610"
+            },
+            "topic_arn": {
+              "Ref": "makTopic4E43F9BC"
+            }
+          }
+        },
+        "Handler": "webHealthLambda.lambda_handler",
+        "Runtime": "python3.6",
+        "Tags": [
+          {
+            "Key": "cohort",
+            "Value": "Mubariz"
+          }
+        ],
+        "Timeout": 60
+      },
+      "DependsOn": [
+        "RoleDefaultPolicy5FFB7DAB",
+        "Role1ABCC5F0"
+      ],
+      "UpdateReplacePolicy": "Delete",
+      "DeletionPolicy": "Delete",
+      "Metadata": {
+        "aws:cdk:path": "Sprint5MubarizStack/webHealthLambda/Resource",
+        "aws:asset:path": "asset.f74e606ecaaad7b7952cc041a75fffd618f91c33371a9b70a17c0c29c7c1953a",
+        "aws:asset:is-bundled": false,
+        "aws:asset:property": "Code"
+      }
+    },
+    "webHealthInvocation82C004ED": {
+      "Type": "AWS::Events::Rule",
+      "Properties": {
+        "Description": "Periodic Lambda",
+        "ScheduleExpression": "rate(1 minute)",
+        "State": "ENABLED",
+        "Targets": [
+          {
+            "Arn": {
+              "Fn::GetAtt": [
+                "webHealthLambdaCE6E4A17",
+                "Arn"
+              ]
+            },
+            "Id": "Target0"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "Sprint5MubarizStack/webHealthInvocation/Resource"
+      }
+    },
+    "webHealthInvocationAllowEventRuleSprint5MubarizStackwebHealthLambda5A10B1B4C62A4FC7": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "webHealthLambdaCE6E4A17",
+            "Arn"
+          ]
+        },
+        "Principal": "events.amazonaws.com",
+        "SourceArn": {
+          "Fn::GetAtt": [
+            "webHealthInvocation82C004ED",
+            "Arn"
+          ]
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Sprint5MubarizStack/webHealthInvocation/AllowEventRuleSprint5MubarizStackwebHealthLambda5A10B1B4"
+      }
+    },
+    "mubarizskipqbucketidE640680B": {
+      "Type": "AWS::S3::Bucket",
+      "Properties": {
+        "Tags": [
+          {
+            "Key": "aws-cdk:auto-delete-objects",
+            "Value": "true"
+          },
+          {
+            "Key": "aws-cdk:cr-owned:b320a17b",
+            "Value": "true"
+          },
+          {
+            "Key": "cohort",
+            "Value": "Mubariz"
+          }
+        ]
+      },
+      "UpdateReplacePolicy": "Delete",
+      "DeletionPolicy": "Delete",
+      "Metadata": {
+        "aws:cdk:path": "Sprint5MubarizStack/mubariz-skipq-bucket-id/Resource"
+      }
+    },
+    "mubarizskipqbucketidPolicyE7807056": {
+      "Type": "AWS::S3::BucketPolicy",
+      "Properties": {
+        "Bucket": {
+          "Ref": "mubarizskipqbucketidE640680B"
+        },
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "s3:GetObject",
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": "*"
+              },
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    {
+                      "Fn::GetAtt": [
+                        "mubarizskipqbucketidE640680B",
+                        "Arn"
+                      ]
+                    },
+                    "/*"
+                  ]
+                ]
+              }
+            },
+            {
+              "Action": [
+                "s3:GetBucket*",
+                "s3:List*",
+                "s3:DeleteObject*"
+              ],
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": {
+                  "Fn::GetAtt": [
+                    "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092",
+                    "Arn"
+                  ]
+                }
+              },
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "mubarizskipqbucketidE640680B",
+                    "Arn"
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::GetAtt": [
+                          "mubarizskipqbucketidE640680B",
+                          "Arn"
+                        ]
+                      },
+                      "/*"
+                    ]
+                  ]
+                }
+              ]
+            }
+          ],
+          "Version": "2012-10-17"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Sprint5MubarizStack/mubariz-skipq-bucket-id/Policy/Resource"
+      }
+    },
+    "mubarizskipqbucketidAutoDeleteObjectsCustomResourceB9D300DA": {
+      "Type": "Custom::S3AutoDeleteObjects",
+      "Properties": {
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "CustomS3AutoDeleteObjectsCustomResourceProviderHandler9D90184F",
+            "Arn"
+          ]
+        },
+        "BucketName": {
+          "Ref": "mubarizskipqbucketidE640680B"
+        }
+      },
+      "DependsOn": [
+        "mubarizskipqbucketidPolicyE7807056"
+      ],
+      "UpdateReplacePolicy": "Delete",
+      "DeletionPolicy": "Delete",
+      "Metadata": {
+        "aws:cdk:path": "Sprint5MubarizStack/mubariz-skipq-bucket-id/AutoDeleteObjectsCustomResource/Default"
+      }
+    },
+    "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ]
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Sub": "arn:${AWS::Partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "Sprint5MubarizStack/Custom::S3AutoDeleteObjectsCustomResourceProvider/Role"
+      }
+    },
+    "CustomS3AutoDeleteObjectsCustomResourceProviderHandler9D90184F": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+          },
+          "S3Key": "483ae06ed27ef8ca76e011264d772420593a6cfe8544759c306ef3b98c9e25be.zip"
+        },
+        "Timeout": 900,
+        "MemorySize": 128,
+        "Handler": "__entrypoint__.handler",
+        "Role": {
+          "Fn::GetAtt": [
+            "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092",
+            "Arn"
+          ]
+        },
+        "Runtime": "nodejs12.x",
+        "Description": {
+          "Fn::Join": [
+            "",
+            [
+              "Lambda function for auto-deleting objects in ",
+              {
+                "Ref": "mubarizskipqbucketidE640680B"
+              },
+              " S3 bucket."
+            ]
+          ]
+        }
+      },
+      "DependsOn": [
+        "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "Sprint5MubarizStack/Custom::S3AutoDeleteObjectsCustomResourceProvider/Handler",
+        "aws:asset:path": "asset.483ae06ed27ef8ca76e011264d772420593a6cfe8544759c306ef3b98c9e25be",
+        "aws:asset:property": "Code"
+      }
+    },
+    "voyagerskipqAwsCliLayerC023166D": {
+      "Type": "AWS::Lambda::LayerVersion",
+      "Properties": {
+        "Content": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+          },
+          "S3Key": "f331b32a8ad8983464106a58e420e7bc7e6341ba2ffb8ac9ad350d7e32845d95.zip"
+        },
+        "Description": "/opt/awscli/aws"
+      },
+      "Metadata": {
+        "aws:cdk:path": "Sprint5MubarizStack/voyager_skipq/AwsCliLayer/Resource",
+        "aws:asset:path": "asset.f331b32a8ad8983464106a58e420e7bc7e6341ba2ffb8ac9ad350d7e32845d95.zip",
+        "aws:asset:is-bundled": false,
+        "aws:asset:property": "Content"
+      }
+    },
+    "voyagerskipqCustomResource7A3DA170": {
+      "Type": "Custom::CDKBucketDeployment",
+      "Properties": {
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C81C01536",
+            "Arn"
+          ]
+        },
+        "SourceBucketNames": [
+          {
+            "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+          }
+        ],
+        "SourceObjectKeys": [
+          "44dec9e40049549a48028791094e3f790783992d488b4d25b8ac24cc4b32c564.zip"
+        ],
+        "DestinationBucketName": {
+          "Ref": "mubarizskipqbucketidE640680B"
+        },
+        "Prune": true
+      },
+      "UpdateReplacePolicy": "Delete",
+      "DeletionPolicy": "Delete",
+      "Metadata": {
+        "aws:cdk:path": "Sprint5MubarizStack/voyager_skipq/CustomResource/Default"
+      }
+    },
+    "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRole89A01265": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+              ]
+            ]
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "cohort",
+            "Value": "Mubariz"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "Sprint5MubarizStack/Custom::CDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C/ServiceRole/Resource"
+      }
+    },
+    "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRoleDefaultPolicy88902FDF": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "s3:GetObject*",
+                "s3:GetBucket*",
+                "s3:List*"
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":s3:::",
+                      {
+                        "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+                      }
+                    ]
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":s3:::",
+                      {
+                        "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+                      },
+                      "/*"
+                    ]
+                  ]
+                }
+              ]
+            },
+            {
+              "Action": [
+                "s3:GetObject*",
+                "s3:GetBucket*",
+                "s3:List*",
+                "s3:DeleteObject*",
+                "s3:PutObject",
+                "s3:PutObjectLegalHold",
+                "s3:PutObjectRetention",
+                "s3:PutObjectTagging",
+                "s3:PutObjectVersionTagging",
+                "s3:Abort*"
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "mubarizskipqbucketidE640680B",
+                    "Arn"
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::GetAtt": [
+                          "mubarizskipqbucketidE640680B",
+                          "Arn"
+                        ]
+                      },
+                      "/*"
+                    ]
+                  ]
+                }
+              ]
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRoleDefaultPolicy88902FDF",
+        "Roles": [
+          {
+            "Ref": "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRole89A01265"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "Sprint5MubarizStack/Custom::CDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C/ServiceRole/DefaultPolicy/Resource"
+      }
+    },
+    "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C81C01536": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+          },
+          "S3Key": "f98b78092dcdd31f5e6d47489beb5f804d4835ef86a8085d0a2053cb9ae711da.zip"
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRole89A01265",
+            "Arn"
+          ]
+        },
+        "Handler": "index.handler",
+        "Layers": [
+          {
+            "Ref": "voyagerskipqAwsCliLayerC023166D"
+          }
+        ],
+        "Runtime": "python3.7",
+        "Tags": [
+          {
+            "Key": "cohort",
+            "Value": "Mubariz"
+          }
+        ],
+        "Timeout": 900
+      },
+      "DependsOn": [
+        "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRoleDefaultPolicy88902FDF",
+        "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRole89A01265"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "Sprint5MubarizStack/Custom::CDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C/Resource",
+        "aws:asset:path": "asset.f98b78092dcdd31f5e6d47489beb5f804d4835ef86a8085d0a2053cb9ae711da",
+        "aws:asset:is-bundled": false,
+        "aws:asset:property": "Code"
+      }
+    },
+    "makTopic4E43F9BC": {
+      "Type": "AWS::SNS::Topic",
+      "Properties": {
+        "Tags": [
+          {
+            "Key": "cohort",
+            "Value": "Mubariz"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "Sprint5MubarizStack/makTopic/Resource"
+      }
+    },
+    "makTopicmubarizkhanskipqgmailcom3D8A81CB": {
+      "Type": "AWS::SNS::Subscription",
+      "Properties": {
+        "Protocol": "email",
+        "TopicArn": {
+          "Ref": "makTopic4E43F9BC"
+        },
+        "Endpoint": "mubariz.khan.skipq@gmail.com"
+      },
+      "Metadata": {
+        "aws:cdk:path": "Sprint5MubarizStack/makTopic/mubariz.khan.skipq@gmail.com/Resource"
+      }
+    },
+    "makbuckettotableABA65610": {
+      "Type": "AWS::DynamoDB::Table",
+      "Properties": {
+        "KeySchema": [
+          {
+            "AttributeName": "url",
+            "KeyType": "HASH"
+          }
+        ],
+        "AttributeDefinitions": [
+          {
+            "AttributeName": "url",
+            "AttributeType": "S"
+          }
+        ],
+        "ProvisionedThroughput": {
+          "ReadCapacityUnits": 5,
+          "WriteCapacityUnits": 5
+        },
+        "Tags": [
+          {
+            "Key": "cohort",
+            "Value": "Mubariz"
+          }
+        ]
+      },
+      "UpdateReplacePolicy": "Retain",
+      "DeletionPolicy": "Retain",
+      "Metadata": {
+        "aws:cdk:path": "Sprint5MubarizStack/mak_bucket_to_table/Resource"
+      }
+    },
+    "makBucketToDBBF370C2B": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+          },
+          "S3Key": "f74e606ecaaad7b7952cc041a75fffd618f91c33371a9b70a17c0c29c7c1953a.zip"
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "Role1ABCC5F0",
+            "Arn"
+          ]
+        },
+        "Environment": {
+          "Variables": {
+            "bucketName": {
+              "Ref": "mubarizskipqbucketidE640680B"
+            },
+            "bktTotable": {
+              "Ref": "makbuckettotableABA65610"
+            }
+          }
+        },
+        "Handler": "BucketToDB.bucket_to_dbHandler",
+        "Runtime": "python3.6",
+        "Tags": [
+          {
+            "Key": "cohort",
+            "Value": "Mubariz"
+          }
+        ],
+        "Timeout": 60
+      },
+      "DependsOn": [
+        "RoleDefaultPolicy5FFB7DAB",
+        "Role1ABCC5F0"
+      ],
+      "UpdateReplacePolicy": "Delete",
+      "DeletionPolicy": "Delete",
+      "Metadata": {
+        "aws:cdk:path": "Sprint5MubarizStack/makBucketToDB/Resource",
+        "aws:asset:path": "asset.f74e606ecaaad7b7952cc041a75fffd618f91c33371a9b70a17c0c29c7c1953a",
+        "aws:asset:is-bundled": false,
+        "aws:asset:property": "Code"
+      }
+    },
+    "ApiHandler5E7490E8": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+          },
+          "S3Key": "f74e606ecaaad7b7952cc041a75fffd618f91c33371a9b70a17c0c29c7c1953a.zip"
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "Role1ABCC5F0",
+            "Arn"
+          ]
+        },
+        "Environment": {
+          "Variables": {
+            "bucketName": {
+              "Ref": "mubarizskipqbucketidE640680B"
+            },
+            "bktTotable": {
+              "Ref": "makbuckettotableABA65610"
+            }
+          }
+        },
+        "Handler": "apiHandler.api_Handler",
+        "Runtime": "python3.6",
+        "Tags": [
+          {
+            "Key": "cohort",
+            "Value": "Mubariz"
+          }
+        ],
+        "Timeout": 60
+      },
+      "DependsOn": [
+        "RoleDefaultPolicy5FFB7DAB",
+        "Role1ABCC5F0"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "Sprint5MubarizStack/ApiHandler/Resource",
+        "aws:asset:path": "asset.f74e606ecaaad7b7952cc041a75fffd618f91c33371a9b70a17c0c29c7c1953a",
+        "aws:asset:is-bundled": false,
+        "aws:asset:property": "Code"
+      }
+    },
+    "APiRoleF7DD9F4C": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/CloudWatchFullAccess"
+              ]
+            ]
+          },
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/AmazonDynamoDBFullAccess"
+              ]
+            ]
+          },
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+              ]
+            ]
+          },
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/AWSLambdaInvocation-DynamoDB"
+              ]
+            ]
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "cohort",
+            "Value": "Mubariz"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "Sprint5MubarizStack/APiRole/Resource"
+      }
+    },
+    "makCrudApi96E0CE7C": {
+      "Type": "AWS::ApiGateway::RestApi",
+      "Properties": {
+        "Name": "mak-CrudApi",
+        "Tags": [
+          {
+            "Key": "cohort",
+            "Value": "Mubariz"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "Sprint5MubarizStack/mak-CrudApi/Resource"
+      }
+    },
+    "makCrudApiCloudWatchRole12498D0D": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "apigateway.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs"
+              ]
+            ]
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "cohort",
+            "Value": "Mubariz"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "Sprint5MubarizStack/mak-CrudApi/CloudWatchRole/Resource"
+      }
+    },
+    "makCrudApiAccount6F979584": {
+      "Type": "AWS::ApiGateway::Account",
+      "Properties": {
+        "CloudWatchRoleArn": {
+          "Fn::GetAtt": [
+            "makCrudApiCloudWatchRole12498D0D",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "makCrudApi96E0CE7C"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "Sprint5MubarizStack/mak-CrudApi/Account"
+      }
+    },
+    "makCrudApiDeployment7C90367035a86f5ae4a0dd4e7dbcb9d58c7d88e0": {
+      "Type": "AWS::ApiGateway::Deployment",
+      "Properties": {
+        "RestApiId": {
+          "Ref": "makCrudApi96E0CE7C"
+        },
+        "Description": "Automatically created by the RestApi construct"
+      },
+      "DependsOn": [
+        "makCrudApiproxyANY04762B3A",
+        "makCrudApiproxy76BD1647",
+        "makCrudApiANY8431B1D6",
+        "makCrudApihealthGET407FE90F",
+        "makCrudApihealth194536A2",
+        "makCrudApiurlDELETEF18317C9",
+        "makCrudApiurlGET2880D101",
+        "makCrudApiurlPATCH5A84DD3E",
+        "makCrudApiurlPUT892BD899",
+        "makCrudApiurl34C291E4"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "Sprint5MubarizStack/mak-CrudApi/Deployment/Resource"
+      }
+    },
+    "makCrudApiDeploymentStageprod2C835F4F": {
+      "Type": "AWS::ApiGateway::Stage",
+      "Properties": {
+        "RestApiId": {
+          "Ref": "makCrudApi96E0CE7C"
+        },
+        "DeploymentId": {
+          "Ref": "makCrudApiDeployment7C90367035a86f5ae4a0dd4e7dbcb9d58c7d88e0"
+        },
+        "StageName": "prod",
+        "Tags": [
+          {
+            "Key": "cohort",
+            "Value": "Mubariz"
+          }
+        ]
+      },
+      "DependsOn": [
+        "makCrudApiAccount6F979584"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "Sprint5MubarizStack/mak-CrudApi/DeploymentStage.prod/Resource"
+      }
+    },
+    "makCrudApiproxy76BD1647": {
+      "Type": "AWS::ApiGateway::Resource",
+      "Properties": {
+        "ParentId": {
+          "Fn::GetAtt": [
+            "makCrudApi96E0CE7C",
+            "RootResourceId"
+          ]
+        },
+        "PathPart": "{proxy+}",
+        "RestApiId": {
+          "Ref": "makCrudApi96E0CE7C"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Sprint5MubarizStack/mak-CrudApi/Default/{proxy+}/Resource"
+      }
+    },
+    "makCrudApiproxyANYApiPermissionSprint5MubarizStackmakCrudApiDF50C8F0ANYproxyDBFD279B": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "ApiHandler5E7490E8",
+            "Arn"
+          ]
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "makCrudApi96E0CE7C"
+              },
+              "/",
+              {
+                "Ref": "makCrudApiDeploymentStageprod2C835F4F"
+              },
+              "/*/*"
+            ]
+          ]
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Sprint5MubarizStack/mak-CrudApi/Default/{proxy+}/ANY/ApiPermission.Sprint5MubarizStackmakCrudApiDF50C8F0.ANY..{proxy+}"
+      }
+    },
+    "makCrudApiproxyANYApiPermissionTestSprint5MubarizStackmakCrudApiDF50C8F0ANYproxy776D636C": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "ApiHandler5E7490E8",
+            "Arn"
+          ]
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "makCrudApi96E0CE7C"
+              },
+              "/test-invoke-stage/*/*"
+            ]
+          ]
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Sprint5MubarizStack/mak-CrudApi/Default/{proxy+}/ANY/ApiPermission.Test.Sprint5MubarizStackmakCrudApiDF50C8F0.ANY..{proxy+}"
+      }
+    },
+    "makCrudApiproxyANY04762B3A": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "HttpMethod": "ANY",
+        "ResourceId": {
+          "Ref": "makCrudApiproxy76BD1647"
+        },
+        "RestApiId": {
+          "Ref": "makCrudApi96E0CE7C"
+        },
+        "AuthorizationType": "NONE",
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":apigateway:",
+                {
+                  "Ref": "AWS::Region"
+                },
+                ":lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "ApiHandler5E7490E8",
+                    "Arn"
+                  ]
+                },
+                "/invocations"
+              ]
+            ]
+          }
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Sprint5MubarizStack/mak-CrudApi/Default/{proxy+}/ANY/Resource"
+      }
+    },
+    "makCrudApiANYApiPermissionSprint5MubarizStackmakCrudApiDF50C8F0ANYADA0457C": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "ApiHandler5E7490E8",
+            "Arn"
+          ]
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "makCrudApi96E0CE7C"
+              },
+              "/",
+              {
+                "Ref": "makCrudApiDeploymentStageprod2C835F4F"
+              },
+              "/*/"
+            ]
+          ]
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Sprint5MubarizStack/mak-CrudApi/Default/ANY/ApiPermission.Sprint5MubarizStackmakCrudApiDF50C8F0.ANY.."
+      }
+    },
+    "makCrudApiANYApiPermissionTestSprint5MubarizStackmakCrudApiDF50C8F0ANYEA0490C3": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "ApiHandler5E7490E8",
+            "Arn"
+          ]
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "makCrudApi96E0CE7C"
+              },
+              "/test-invoke-stage/*/"
+            ]
+          ]
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Sprint5MubarizStack/mak-CrudApi/Default/ANY/ApiPermission.Test.Sprint5MubarizStackmakCrudApiDF50C8F0.ANY.."
+      }
+    },
+    "makCrudApiANY8431B1D6": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "HttpMethod": "ANY",
+        "ResourceId": {
+          "Fn::GetAtt": [
+            "makCrudApi96E0CE7C",
+            "RootResourceId"
+          ]
+        },
+        "RestApiId": {
+          "Ref": "makCrudApi96E0CE7C"
+        },
+        "AuthorizationType": "NONE",
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":apigateway:",
+                {
+                  "Ref": "AWS::Region"
+                },
+                ":lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "ApiHandler5E7490E8",
+                    "Arn"
+                  ]
+                },
+                "/invocations"
+              ]
+            ]
+          }
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Sprint5MubarizStack/mak-CrudApi/Default/ANY/Resource"
+      }
+    },
+    "makCrudApihealth194536A2": {
+      "Type": "AWS::ApiGateway::Resource",
+      "Properties": {
+        "ParentId": {
+          "Fn::GetAtt": [
+            "makCrudApi96E0CE7C",
+            "RootResourceId"
+          ]
+        },
+        "PathPart": "health",
+        "RestApiId": {
+          "Ref": "makCrudApi96E0CE7C"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Sprint5MubarizStack/mak-CrudApi/Default/health/Resource"
+      }
+    },
+    "makCrudApihealthGETApiPermissionSprint5MubarizStackmakCrudApiDF50C8F0GEThealth7BCE5F25": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "ApiHandler5E7490E8",
+            "Arn"
+          ]
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "makCrudApi96E0CE7C"
+              },
+              "/",
+              {
+                "Ref": "makCrudApiDeploymentStageprod2C835F4F"
+              },
+              "/GET/health"
+            ]
+          ]
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Sprint5MubarizStack/mak-CrudApi/Default/health/GET/ApiPermission.Sprint5MubarizStackmakCrudApiDF50C8F0.GET..health"
+      }
+    },
+    "makCrudApihealthGETApiPermissionTestSprint5MubarizStackmakCrudApiDF50C8F0GEThealth58EC987F": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "ApiHandler5E7490E8",
+            "Arn"
+          ]
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "makCrudApi96E0CE7C"
+              },
+              "/test-invoke-stage/GET/health"
+            ]
+          ]
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Sprint5MubarizStack/mak-CrudApi/Default/health/GET/ApiPermission.Test.Sprint5MubarizStackmakCrudApiDF50C8F0.GET..health"
+      }
+    },
+    "makCrudApihealthGET407FE90F": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "HttpMethod": "GET",
+        "ResourceId": {
+          "Ref": "makCrudApihealth194536A2"
+        },
+        "RestApiId": {
+          "Ref": "makCrudApi96E0CE7C"
+        },
+        "AuthorizationType": "NONE",
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":apigateway:",
+                {
+                  "Ref": "AWS::Region"
+                },
+                ":lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "ApiHandler5E7490E8",
+                    "Arn"
+                  ]
+                },
+                "/invocations"
+              ]
+            ]
+          }
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Sprint5MubarizStack/mak-CrudApi/Default/health/GET/Resource"
+      }
+    },
+    "makCrudApiurl34C291E4": {
+      "Type": "AWS::ApiGateway::Resource",
+      "Properties": {
+        "ParentId": {
+          "Fn::GetAtt": [
+            "makCrudApi96E0CE7C",
+            "RootResourceId"
+          ]
+        },
+        "PathPart": "url",
+        "RestApiId": {
+          "Ref": "makCrudApi96E0CE7C"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Sprint5MubarizStack/mak-CrudApi/Default/url/Resource"
+      }
+    },
+    "makCrudApiurlGETApiPermissionSprint5MubarizStackmakCrudApiDF50C8F0GETurl54402F99": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "ApiHandler5E7490E8",
+            "Arn"
+          ]
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "makCrudApi96E0CE7C"
+              },
+              "/",
+              {
+                "Ref": "makCrudApiDeploymentStageprod2C835F4F"
+              },
+              "/GET/url"
+            ]
+          ]
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Sprint5MubarizStack/mak-CrudApi/Default/url/GET/ApiPermission.Sprint5MubarizStackmakCrudApiDF50C8F0.GET..url"
+      }
+    },
+    "makCrudApiurlGETApiPermissionTestSprint5MubarizStackmakCrudApiDF50C8F0GETurlC8487C40": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "ApiHandler5E7490E8",
+            "Arn"
+          ]
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "makCrudApi96E0CE7C"
+              },
+              "/test-invoke-stage/GET/url"
+            ]
+          ]
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Sprint5MubarizStack/mak-CrudApi/Default/url/GET/ApiPermission.Test.Sprint5MubarizStackmakCrudApiDF50C8F0.GET..url"
+      }
+    },
+    "makCrudApiurlGET2880D101": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "HttpMethod": "GET",
+        "ResourceId": {
+          "Ref": "makCrudApiurl34C291E4"
+        },
+        "RestApiId": {
+          "Ref": "makCrudApi96E0CE7C"
+        },
+        "AuthorizationType": "NONE",
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":apigateway:",
+                {
+                  "Ref": "AWS::Region"
+                },
+                ":lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "ApiHandler5E7490E8",
+                    "Arn"
+                  ]
+                },
+                "/invocations"
+              ]
+            ]
+          }
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Sprint5MubarizStack/mak-CrudApi/Default/url/GET/Resource"
+      }
+    },
+    "makCrudApiurlPUTApiPermissionSprint5MubarizStackmakCrudApiDF50C8F0PUTurlC336F7C5": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "ApiHandler5E7490E8",
+            "Arn"
+          ]
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "makCrudApi96E0CE7C"
+              },
+              "/",
+              {
+                "Ref": "makCrudApiDeploymentStageprod2C835F4F"
+              },
+              "/PUT/url"
+            ]
+          ]
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Sprint5MubarizStack/mak-CrudApi/Default/url/PUT/ApiPermission.Sprint5MubarizStackmakCrudApiDF50C8F0.PUT..url"
+      }
+    },
+    "makCrudApiurlPUTApiPermissionTestSprint5MubarizStackmakCrudApiDF50C8F0PUTurl764931E7": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "ApiHandler5E7490E8",
+            "Arn"
+          ]
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "makCrudApi96E0CE7C"
+              },
+              "/test-invoke-stage/PUT/url"
+            ]
+          ]
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Sprint5MubarizStack/mak-CrudApi/Default/url/PUT/ApiPermission.Test.Sprint5MubarizStackmakCrudApiDF50C8F0.PUT..url"
+      }
+    },
+    "makCrudApiurlPUT892BD899": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "HttpMethod": "PUT",
+        "ResourceId": {
+          "Ref": "makCrudApiurl34C291E4"
+        },
+        "RestApiId": {
+          "Ref": "makCrudApi96E0CE7C"
+        },
+        "AuthorizationType": "NONE",
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":apigateway:",
+                {
+                  "Ref": "AWS::Region"
+                },
+                ":lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "ApiHandler5E7490E8",
+                    "Arn"
+                  ]
+                },
+                "/invocations"
+              ]
+            ]
+          }
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Sprint5MubarizStack/mak-CrudApi/Default/url/PUT/Resource"
+      }
+    },
+    "makCrudApiurlPATCHApiPermissionSprint5MubarizStackmakCrudApiDF50C8F0PATCHurlEDB60F21": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "ApiHandler5E7490E8",
+            "Arn"
+          ]
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "makCrudApi96E0CE7C"
+              },
+              "/",
+              {
+                "Ref": "makCrudApiDeploymentStageprod2C835F4F"
+              },
+              "/PATCH/url"
+            ]
+          ]
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Sprint5MubarizStack/mak-CrudApi/Default/url/PATCH/ApiPermission.Sprint5MubarizStackmakCrudApiDF50C8F0.PATCH..url"
+      }
+    },
+    "makCrudApiurlPATCHApiPermissionTestSprint5MubarizStackmakCrudApiDF50C8F0PATCHurl7D3FCEEF": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "ApiHandler5E7490E8",
+            "Arn"
+          ]
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "makCrudApi96E0CE7C"
+              },
+              "/test-invoke-stage/PATCH/url"
+            ]
+          ]
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Sprint5MubarizStack/mak-CrudApi/Default/url/PATCH/ApiPermission.Test.Sprint5MubarizStackmakCrudApiDF50C8F0.PATCH..url"
+      }
+    },
+    "makCrudApiurlPATCH5A84DD3E": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "HttpMethod": "PATCH",
+        "ResourceId": {
+          "Ref": "makCrudApiurl34C291E4"
+        },
+        "RestApiId": {
+          "Ref": "makCrudApi96E0CE7C"
+        },
+        "AuthorizationType": "NONE",
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":apigateway:",
+                {
+                  "Ref": "AWS::Region"
+                },
+                ":lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "ApiHandler5E7490E8",
+                    "Arn"
+                  ]
+                },
+                "/invocations"
+              ]
+            ]
+          }
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Sprint5MubarizStack/mak-CrudApi/Default/url/PATCH/Resource"
+      }
+    },
+    "makCrudApiurlDELETEApiPermissionSprint5MubarizStackmakCrudApiDF50C8F0DELETEurl45E1BB2D": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "ApiHandler5E7490E8",
+            "Arn"
+          ]
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "makCrudApi96E0CE7C"
+              },
+              "/",
+              {
+                "Ref": "makCrudApiDeploymentStageprod2C835F4F"
+              },
+              "/DELETE/url"
+            ]
+          ]
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Sprint5MubarizStack/mak-CrudApi/Default/url/DELETE/ApiPermission.Sprint5MubarizStackmakCrudApiDF50C8F0.DELETE..url"
+      }
+    },
+    "makCrudApiurlDELETEApiPermissionTestSprint5MubarizStackmakCrudApiDF50C8F0DELETEurl0F3FC008": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "ApiHandler5E7490E8",
+            "Arn"
+          ]
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "makCrudApi96E0CE7C"
+              },
+              "/test-invoke-stage/DELETE/url"
+            ]
+          ]
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Sprint5MubarizStack/mak-CrudApi/Default/url/DELETE/ApiPermission.Test.Sprint5MubarizStackmakCrudApiDF50C8F0.DELETE..url"
+      }
+    },
+    "makCrudApiurlDELETEF18317C9": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "HttpMethod": "DELETE",
+        "ResourceId": {
+          "Ref": "makCrudApiurl34C291E4"
+        },
+        "RestApiId": {
+          "Ref": "makCrudApi96E0CE7C"
+        },
+        "AuthorizationType": "NONE",
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":apigateway:",
+                {
+                  "Ref": "AWS::Region"
+                },
+                ":lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "ApiHandler5E7490E8",
+                    "Arn"
+                  ]
+                },
+                "/invocations"
+              ]
+            ]
+          }
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Sprint5MubarizStack/mak-CrudApi/Default/url/DELETE/Resource"
+      }
+    },
+    "DBLambdaInvocation4D751308": {
+      "Type": "AWS::Events::Rule",
+      "Properties": {
+        "Description": "Periodic DB Lambda",
+        "ScheduleExpression": "rate(1 minute)",
+        "State": "ENABLED",
+        "Targets": [
+          {
+            "Arn": {
+              "Fn::GetAtt": [
+                "makBucketToDBBF370C2B",
+                "Arn"
+              ]
+            },
+            "Id": "Target0"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "Sprint5MubarizStack/DBLambdaInvocation/Resource"
+      }
+    },
+    "DBLambdaInvocationAllowEventRuleSprint5MubarizStackmakBucketToDB1FCD88C3801A89DC": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "makBucketToDBBF370C2B",
+            "Arn"
+          ]
+        },
+        "Principal": "events.amazonaws.com",
+        "SourceArn": {
+          "Fn::GetAtt": [
+            "DBLambdaInvocation4D751308",
+            "Arn"
+          ]
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Sprint5MubarizStack/DBLambdaInvocation/AllowEventRuleSprint5MubarizStackmakBucketToDB1FCD88C3"
+      }
+    },
+    "CDKMetadata": {
+      "Type": "AWS::CDK::Metadata",
+      "Properties": {
+        "Analytics": "v2:deflate64:H4sIAAAAAAAA/21SyU7DMBD9lt5ds1QCcUyDOBURpRXXyLWHMtSxIy8tUZR/x0u6SZzmzZvN88aP9OGZ3s/Y0c652M8lbumwdozvSaCaAVlLh1pLIOWXSrbSEnkf3YxGInrFWi1C4YZtc2YCI5Gs3QpGhzevuEOtYugaV2BatHbyVqwH8wkm+WtUOwlOn/NHYhfNwKwFZ2kRDRHQSd23oBxder4H93omYjYdMrtkFkiGccyEsrlsc+2HamWDDn5rucHu9Nwbf6M75GnXCEYChzA2FNV+EstHBViHO+bgyHo6rJIaNVhXdJhSLrDgXHvlyGWDyF554Sa71DeDUKq94ZB2q4z+7U/M1Djjd3DfWkRqQqfIOJ4hSWLGtkFyUnrrdPtvs9tQGHpAAWY6ciPj9ZrwabhEWhxtKTEdNLb48K7zaaNSK4H5nFUfXqTuFvSJvsx+LOLcBAWwBVpn+wdAwOv7mwIAAA=="
+      },
+      "Metadata": {
+        "aws:cdk:path": "Sprint5MubarizStack/CDKMetadata/Default"
+      },
+      "Condition": "CDKMetadataAvailable"
+    }
+  },
+  "Outputs": {
+    "makCrudApiEndpoint50A8EC44": {
+      "Value": {
+        "Fn::Join": [
+          "",
+          [
+            "https://",
+            {
+              "Ref": "makCrudApi96E0CE7C"
+            },
+            ".execute-api.",
+            {
+              "Ref": "AWS::Region"
+            },
+            ".",
+            {
+              "Ref": "AWS::URLSuffix"
+            },
+            "/",
+            {
+              "Ref": "makCrudApiDeploymentStageprod2C835F4F"
+            },
+            "/"
+          ]
+        ]
+      }
+    }
+  },
+  "Conditions": {
+    "CDKMetadataAvailable": {
+      "Fn::Or": [
+        {
+          "Fn::Or": [
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "af-south-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "ap-east-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "ap-northeast-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "ap-northeast-2"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "ap-south-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "ap-southeast-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "ap-southeast-2"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "ca-central-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "cn-north-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "cn-northwest-1"
+              ]
+            }
+          ]
+        },
+        {
+          "Fn::Or": [
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "eu-central-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "eu-north-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "eu-south-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "eu-west-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "eu-west-2"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "eu-west-3"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "me-south-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "sa-east-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "us-east-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "us-east-2"
+              ]
+            }
+          ]
+        },
+        {
+          "Fn::Or": [
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "us-west-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "us-west-2"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "Parameters": {
+    "BootstrapVersion": {
+      "Type": "AWS::SSM::Parameter::Value<String>",
+      "Default": "/cdk-bootstrap/hnb659fds/version",
+      "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]"
+    }
+  },
+  "Rules": {
+    "CheckBootstrapVersion": {
+      "Assertions": [
+        {
+          "Assert": {
+            "Fn::Not": [
+              {
+                "Fn::Contains": [
+                  [
+                    "1",
+                    "2",
+                    "3",
+                    "4",
+                    "5"
+                  ],
+                  {
+                    "Ref": "BootstrapVersion"
+                  }
+                ]
+              }
+            ]
+          },
+          "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
+        }
+      ]
+    }
+  }
+}

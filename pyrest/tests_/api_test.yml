@@ -1,0 +1,26 @@
+- config:
+   - testset: "basic tests"
+   - timeout: 100
+   
+- test:
+    - name: "basic get"
+    - url: "/prod/url"
+    - method: 'GET'
+    
+- test:
+    - name: "basic deletion"
+    - url: "prod/url"
+    - body: '{"url": "www.skipq.com"}'
+    - method: 'DELETE'
+    
+- test:
+    - name: "basic put"
+    - url: "prod/url"
+    - body: '{"url": "www.skipq.com"}'
+    - method: 'PUT'
+    
+- test:
+    - name: "basic PATCH"
+    - url: "prod/url"
+    - body: '{"url": "www.skipq.com,www.timetime.com"}'
+    - method: 'PATCH'
